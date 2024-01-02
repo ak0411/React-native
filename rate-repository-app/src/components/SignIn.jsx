@@ -3,6 +3,7 @@ import FormikTextInput from './FormikTextInput';
 import Text from './Text';
 import { Formik } from 'formik';
 import theme from '../theme';
+import * as yup from 'yup';
 
 const initialValues = {
   username: '',
@@ -13,23 +14,24 @@ const SignInForm = ({ onSubmit }) => {
   const styles = StyleSheet.create({
     container: {
       backgroundColor: 'white',
-      padding: 10
+      paddingHorizontal: 10,
     },
     button: {
       backgroundColor: theme.colors.primary,
       borderRadius: 5,
+      marginVertical: 20
     },
     buttonText: {
       color: 'white',
       textAlign: 'center',
-      padding: 20
+      padding: 15,
     },
     inputField: {
       borderWidth: 1,
       borderColor: 'grey',
       borderRadius: 5,
       padding: 10,
-      marginBottom: 10
+      marginTop: 20
     }
   })
 
@@ -44,13 +46,24 @@ const SignInForm = ({ onSubmit }) => {
   );
 };
 
+const validationSchema = yup.object().shape({
+  username: yup
+    .string()
+    .min(3, 'Username must be greater or equal to 3')
+    .required('Username is required'),
+  password: yup
+    .string()
+    .min(5, 'Password must be greater or equal to 5')
+    .required('Password is required')
+})
+
 const SignIn = () => {
   const onSubmit = (values) => {
     console.log(values);
   };
 
   return (
-    <Formik initialValues={initialValues} onSubmit={onSubmit}>
+    <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
       {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit} />}
     </Formik>
   );
