@@ -1,6 +1,7 @@
 import { Image, StyleSheet, View } from 'react-native';
 import Text from './Text';
 import theme from '../theme';
+import formatNumber from '../utils/formatNumber';
 
 const styles = StyleSheet.create({
   container: {
@@ -38,14 +39,6 @@ const styles = StyleSheet.create({
   }
 });
 
-const formatNumber = (number) => {
-  if (number >= 1000) {
-    const formattedNumber = (number / 1000).toFixed(1);
-    return `${formattedNumber}k`;
-  }
-  return number.toString();
-};
-
 const RepoInfo = ({ avatarUrl, fullName, description, language }) => (
   <View style={styles.container}>
     <View style={styles.avatarContainer}>
@@ -73,7 +66,7 @@ const StatText = ({ value, label }) => (
 
 const RepositoryItem = ({ repository }) => {
   return (
-    <View style={{ backgroundColor: '#ffffff' }}>
+    <View testID="repositoryItem" style={{ backgroundColor: '#ffffff' }}>
       <RepoInfo
         avatarUrl={repository.ownerAvatarUrl}
         fullName={repository.fullName}
