@@ -1,49 +1,29 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import FormikTextInput from './FormikTextInput';
-import Text from './Text';
 import { Formik } from 'formik';
-import theme from '../theme';
 import * as yup from 'yup';
 import useSignIn from '../hooks/useSignIn';
 import { useNavigate } from 'react-router-native';
+import Button from './Button';
 
 const initialValues = {
   username: '',
   password: '',
 };
 
-const SignInForm = ({ onSubmit }) => {
-  const styles = StyleSheet.create({
-    container: {
-      backgroundColor: 'white',
-      paddingHorizontal: 10,
-    },
-    button: {
-      backgroundColor: theme.colors.primary,
-      borderRadius: 5,
-      marginVertical: 20
-    },
-    buttonText: {
-      color: 'white',
-      textAlign: 'center',
-      padding: 15,
-    },
-    inputField: {
-      borderWidth: 1,
-      borderColor: 'grey',
-      borderRadius: 5,
-      padding: 10,
-      marginTop: 20
-    }
-  });
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'white',
+    padding: 10,
+  }
+});
 
+const SignInForm = ({ onSubmit }) => {
   return (
     <View style={styles.container}>
-      <FormikTextInput style={styles.inputField} name='username' placeholder='Username' />
-      <FormikTextInput style={styles.inputField} name='password' placeholder='Password' secureTextEntry />
-      <Pressable style={styles.button} onPress={onSubmit}>
-        <Text style={styles.buttonText} fontWeight='bold'>Sign in</Text>
-      </Pressable>
+      <FormikTextInput name='username' placeholder='Username' />
+      <FormikTextInput name='password' placeholder='Password' secureTextEntry />
+      <Button label='Sign in' onSubmit={onSubmit} />
     </View>
   );
 };
