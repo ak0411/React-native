@@ -1,7 +1,7 @@
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import Text from './Text';
 import theme from '../theme';
-import formatNumber from '../utils/formatNumber';
+import { formatNumber } from '../utils/formatter';
 import * as Linking from 'expo-linking';
 
 const styles = StyleSheet.create({
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const RepoInfo = ({ avatarUrl, fullName, description, language }) => (
+const RepositoryHeader = ({ avatarUrl, fullName, description, language }) => (
   <View style={styles.infoContainer}>
     <View style={styles.avatarContainer}>
       <Image
@@ -80,7 +80,7 @@ const RepositoryItem = ({ repository, showGithub = false }) => {
 
   return (
     <View testID="repositoryItem" style={styles.container}>
-      <RepoInfo
+      <RepositoryHeader
         avatarUrl={repository.ownerAvatarUrl}
         fullName={repository.fullName}
         description={repository.description}
