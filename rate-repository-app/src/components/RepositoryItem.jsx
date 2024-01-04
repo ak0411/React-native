@@ -1,13 +1,16 @@
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 import Text from './Text';
 import theme from '../theme';
 import formatNumber from '../utils/formatNumber';
+import * as Linking from 'expo-linking';
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    flexGrow: 1,
-    padding: 10
+    padding: 10,
+    backgroundColor: 'white'
+  },
+  infoContainer: {
+    flexDirection: 'row'
   },
   avatar: {
     width: 50,
@@ -18,9 +21,6 @@ const styles = StyleSheet.create({
     flexGrow: 0,
     paddingRight: 15,
   },
-  infoContainer: {
-    flexGrow: 1,
-  },
   languageContainer: {
     backgroundColor: theme.colors.primary,
     borderRadius: 5,
@@ -28,26 +28,35 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
   languageTag: {
-    color: '#ffffff',
+    color: 'white',
     padding: 5,
   },
   statsContainer: {
     flexDirection: 'row',
     flexGrow: 1,
     justifyContent: 'space-around',
-    paddingBottom: 10
+    paddingVertical: 10,
+  },
+  githubContainer: {
+    backgroundColor: theme.colors.primary,
+    borderRadius: 5
+  },
+  githubText: {
+    color: 'white',
+    padding: 10,
+    textAlign: 'center',
   }
 });
 
 const RepoInfo = ({ avatarUrl, fullName, description, language }) => (
-  <View style={styles.container}>
+  <View style={styles.infoContainer}>
     <View style={styles.avatarContainer}>
       <Image
         style={styles.avatar}
         source={{ uri: avatarUrl }}
       />
     </View>
-    <View style={styles.infoContainer}>
+    <View style={{ flexShrink: 1 }}>
       <Text fontWeight='bold' fontSize='subheading'>{fullName}</Text>
       <Text color='textSecondary'>{description}</Text>
       <View style={styles.languageContainer}>
@@ -64,9 +73,13 @@ const StatText = ({ value, label }) => (
   </View>
 );
 
-const RepositoryItem = ({ repository }) => {
+const RepositoryItem = ({ repository, showGithub = false }) => {
+  if (!repository) {
+    return null;
+  }
+
   return (
-    <View testID="repositoryItem" style={{ backgroundColor: '#ffffff' }}>
+    <View testID="repositoryItem" style={styles.container}>
       <RepoInfo
         avatarUrl={repository.ownerAvatarUrl}
         fullName={repository.fullName}
@@ -79,6 +92,13 @@ const RepositoryItem = ({ repository }) => {
         <StatText value={repository.reviewCount} label='Reviews' />
         <StatText value={repository.ratingAverage} label='Rating' />
       </View>
+      {showGithub &&
+        <View style={styles.githubContainer}>
+          <Pressable onPress={() => Linking.openURL(repository.url)}>
+            <Text fontWeight='bold' style={styles.githubText}>Open in GitHub</Text>
+          </Pressable>
+        </View>
+      }
     </View>
   );
 };
