@@ -23,9 +23,9 @@ const styles = StyleSheet.create({
 const ReviewForm = ({ onSubmit }) => {
   return (
     <View style={styles.container}>
-      <FormikTextInput name='ownerName' placeholder='Repository owner' />
+      <FormikTextInput name='ownerName' placeholder='Repository owner name' />
       <FormikTextInput name='repositoryName' placeholder='Repository name' />
-      <FormikTextInput name='rating' placeholder='Rating (0 - 100)' />
+      <FormikTextInput name='rating' placeholder='Rating between 0 - 100' />
       <FormikTextInput name='text' placeholder='Review text (Optional)' multiline />
       <Button label='Submit' onSubmit={onSubmit} />
     </View>
@@ -35,11 +35,9 @@ const ReviewForm = ({ onSubmit }) => {
 const validationSchema = yup.object().shape({
   ownerName: yup
     .string()
-    .min(1, 'Owner name must be greater or equal to 1')
-    .required('Owner name is required'),
+    .required('Repository owner name is required'),
   repositoryName: yup
     .string()
-    .min(1, 'Repository name must be greater or equal to 1')
     .required('Repository name is required'),
   rating: yup
     .number()
@@ -51,12 +49,6 @@ const validationSchema = yup.object().shape({
     .string()
     .max(300, 'Text limit is 300')
 });
-
-export const ReviewContainer = ({ onSubmit }) => (
-  <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
-    {({ handleSubmit }) => <ReviewForm onSubmit={handleSubmit} />}
-  </Formik>
-);
 
 const Review = () => {
   const [createReview] = useReview();
@@ -73,7 +65,11 @@ const Review = () => {
     }
   };
 
-  return <ReviewContainer onSubmit={onSubmit} />;
+  return (
+    <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
+      {({ handleSubmit }) => <ReviewForm onSubmit={handleSubmit} />}
+    </Formik>
+  );
 };
 
 export default Review;

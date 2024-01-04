@@ -6,7 +6,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'grey',
     borderRadius: 5,
-    padding: 10
+    padding: 10,
+    color: theme.colors.textSecondary
   },
   error: {
     borderColor: theme.colors.error
