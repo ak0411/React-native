@@ -2,12 +2,13 @@ import { useApolloClient, useQuery } from '@apollo/client';
 import useAuthStorage from './useAuthStorage';
 import { ME } from '../graphql/queries';
 
-const useAuthentication = () => {
+const useAuthentication = (includeReviews = false) => {
   const authStorage = useAuthStorage();
   const apolloClient = useApolloClient();
 
-  const { data } = useQuery(ME, {
-    fetchPolicy: 'cache-and-network'
+  const { data, loading, refetch } = useQuery(ME, {
+    fetchPolicy: 'cache-and-network',
+    variables: { includeReviews }
   });
 
   const signOut = async () => {
@@ -15,7 +16,7 @@ const useAuthentication = () => {
     apolloClient.resetStore();
   };
 
-  return { isAuthenticated: data && data.me, signOut };
+  return { me: data && data.me, loading, signOut, refetch };
 };
 
 export default useAuthentication;

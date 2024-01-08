@@ -8,12 +8,12 @@ const useRepositories = (filter, searchKeyword) => {
     lowest: { orderBy: 'RATING_AVERAGE', orderDirection: 'ASC' },
   };
 
-  const { data, loading, fetchMore } = useQuery(GET_REPOSITORIES, {
+  const { data, loading, refetch } = useQuery(GET_REPOSITORIES, {
     fetchPolicy: 'cache-and-network',
     variables: { ...filterOptions[filter], searchKeyword },
   });
 
-  return { repositories: data && data.repositories, loading, refetch: fetchMore };
+  return { repositories: data && data.repositories, loading, refetch };
 };
 
 export default useRepositories;

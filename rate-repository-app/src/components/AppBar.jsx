@@ -13,15 +13,16 @@ const styles = StyleSheet.create({
 });
 
 const AppBar = () => {
-  const { isAuthenticated, signOut } = useAuthentication();
+  const { me, signOut } = useAuthentication();
 
   return (
     <View style={styles.container}>
       <ScrollView horizontal>
         <AppBarTab to='/' title='Repositories' />
-        {isAuthenticated
+        {me
           ? <>
             <AppBarTab to='/review' title='Create a review' />
+            <AppBarTab to='/myreviews' title='My reviews' />
             <AppBarTab to='/' title='Sign out' onPress={signOut}/>
           </>
           : <>

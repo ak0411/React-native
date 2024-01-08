@@ -14,9 +14,11 @@ const styles = StyleSheet.create({
   }
 });
 
-const Button = ({ onSubmit, label }) => {
+const Button = ({ onSubmit, label, style }) => {
+  const buttonStyle = [styles.button, style];
+
   return (
-    <Pressable style={styles.button} onPress={onSubmit}>
+    <Pressable style={buttonStyle} onPress={onSubmit}>
       <Text style={styles.text} fontWeight='bold'>{label}</Text>
     </Pressable>
   );
