@@ -1,10 +1,9 @@
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import Text from './Text';
 import theme from '../theme';
 import { formatNumber } from '../utils/formatter';
 import * as Linking from 'expo-linking';
 import Button from './Button';
-import { useNavigate } from 'react-router-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -67,32 +66,28 @@ const StatText = ({ value, label }) => (
 );
 
 const RepositoryItem = ({ repository, showGithub = false }) => {
-  const navigate = useNavigate();
-
   if (!repository) {
     return null;
   }
 
   return (
-    <Pressable onPress={() => navigate(`/repository/${repository.id}`)}>
-      <View testID="repositoryItem" style={styles.container}>
-        <RepositoryHeader
-          avatarUrl={repository.ownerAvatarUrl}
-          fullName={repository.fullName}
-          description={repository.description}
-          language={repository.language}
-        />
-        <View style={styles.statsContainer}>
-          <StatText value={repository.stargazersCount} label='Stars' />
-          <StatText value={repository.forksCount} label='Forks' />
-          <StatText value={repository.reviewCount} label='Reviews' />
-          <StatText value={repository.ratingAverage} label='Rating' />
-        </View>
-        {showGithub &&
-          <Button label='Open in GitHub' onSubmit={() => Linking.openURL(repository.url)}/>
-        }
+    <View testID="repositoryItem" style={styles.container}>
+      <RepositoryHeader
+        avatarUrl={repository.ownerAvatarUrl}
+        fullName={repository.fullName}
+        description={repository.description}
+        language={repository.language}
+      />
+      <View style={styles.statsContainer}>
+        <StatText value={repository.stargazersCount} label='Stars' />
+        <StatText value={repository.forksCount} label='Forks' />
+        <StatText value={repository.reviewCount} label='Reviews' />
+        <StatText value={repository.ratingAverage} label='Rating' />
       </View>
-    </Pressable>
+      {showGithub &&
+        <Button label='Open in GitHub' onSubmit={() => Linking.openURL(repository.url)}/>
+      }
+    </View>
   );
 };
 

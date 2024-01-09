@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-native';
 import RepositoryItem from './RepositoryItem';
-import useRepositoryById from '../hooks/useRepositoryById';
+import useRepository from '../hooks/useRepository';
 import { FlatList, StyleSheet, View } from 'react-native';
 import ReviewItem from './ReviewItem';
 
@@ -23,10 +23,14 @@ const ItemSeparator = () => <View style={styles.separator} />;
 
 const SingleRepository = () => {
   const { id } = useParams();
-  const repository = useRepositoryById(id);
+  const { repository, fetchMore } = useRepository({ repositoryId: id, first: 4 });
   const reviews = repository
     ? repository.reviews.edges.map(edge => edge.node)
     : [];
+
+  const onEndReach = () => {
+    fetchMore();
+  };
 
   return (
     <FlatList
@@ -42,6 +46,8 @@ const SingleRepository = () => {
       }
       keyExtractor={({ id }) => id}
       ListHeaderComponent={() => <RepositoryInfo repository={repository} />}
+      onEndReached={onEndReach}
+      onEndReachedThreshold={0.5}
     />
   );
 };

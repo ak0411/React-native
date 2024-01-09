@@ -24,6 +24,10 @@ const MyReviews = () => {
     ? me.reviews.edges.map(edge => edge.node)
     : [];
 
+  const onView = (repositoryId) => {
+    navigate(`/repository/${repositoryId}`);
+  };
+
   const onDelete = (repositoryId) => {
     Alert.alert('Delete review', 'Are you sure you want to delete this review?', [
       {
@@ -50,7 +54,7 @@ const MyReviews = () => {
           createdAt={item.createdAt}
           text={item.text}
           MyReviews={true}
-          onView={() => navigate(`/repository/${item.repository.id}`)}
+          onView={() => onView(item.repository.id)}
           onDelete={() => onDelete(item.id)}
         />
       }

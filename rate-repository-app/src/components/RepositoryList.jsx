@@ -1,10 +1,11 @@
-import { FlatList, View, StyleSheet } from 'react-native';
+import { FlatList, View, StyleSheet, Pressable } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import RepositoryItem from './RepositoryItem';
 import useRepositories from '../hooks/useRepositories';
 import React, { useState } from 'react';
 import { Searchbar } from 'react-native-paper';
 import { useDebounce } from 'use-debounce';
+import { useNavigate } from 'react-router-native';
 
 const styles = StyleSheet.create({
   separator: {
@@ -50,7 +51,7 @@ export class RepositoryListContainer extends React.Component {
   };
 
   render() {
-    const { repositories } = this.props;
+    const { repositories, onEndReach, onPress } = this.props;
     const repositoryNodes = repositories
       ? repositories.edges.map(edge => edge.node)
       : [];
@@ -59,19 +60,40 @@ export class RepositoryListContainer extends React.Component {
       <FlatList
         data={repositoryNodes}
         ItemSeparatorComponent={ItemSeparator}
-        renderItem={({ item }) => <RepositoryItem repository={item} />}
+        renderItem={({ item }) => (
+          <Pressable onPress={() => onPress(item.id)}>
+            <RepositoryItem repository={item} />
+          </Pressable>
+        )}
         ListHeaderComponent={this.renderHeader}
+        onEndReached={onEndReach}
+        onEndReachedThreshold={0.5}
       />
     );
   }
 }
 
 const RepositoryList = () => {
+  const navigate = useNavigate();
   const [filter, setFilter] = useState('latest');
   const [search, setSearch] = useState('');
   const [searchKeyword] = useDebounce(search, 500);
 
-  const { repositories } = useRepositories(filter, searchKeyword);
+  const filterOptions = {
+    latest: { orderBy: 'CREATED_AT', orderDirection: 'DESC' },
+    highest: { orderBy: 'RATING_AVERAGE', orderDirection: 'DESC' },
+    lowest: { orderBy: 'RATING_AVERAGE', orderDirection: 'ASC' },
+  };
+
+  const { repositories, fetchMore } = useRepositories({ ...filterOptions[filter], searchKeyword, first: 5 });
+
+  const onEndReach = () => {
+    fetchMore();
+  };
+
+  const onPress = (repositoryId) => {
+    navigate(`/repository/${repositoryId}`);
+  };
 
   return <RepositoryListContainer
     repositories={repositories}
@@ -79,6 +101,8 @@ const RepositoryList = () => {
     setFilter={setFilter}
     search={search}
     setSearch={setSearch}
+    onEndReach={onEndReach}
+    onPress={onPress}
   />;
 };
 
